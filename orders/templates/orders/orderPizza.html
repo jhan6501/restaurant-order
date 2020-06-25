@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Order Food </title>
+    </head>
+    <body>
+        <h1> Order Pizza </h1>
+        <h2> Make your Pizza! </h2>
+        <form action> 
+
+            <label for = "size"> Pick your size </label>
+            <select name = "size" id = "size">
+                {% for size in sizes %}
+                    <option value = size> {{size}} </option>
+                {% endfor %}
+            </select>
+
+            <br> </br>
+
+            <label for = "Type"> Pick your Type </label>
+            <select name = "Type" id = "Type">
+                {% for type in types %}
+                    <option value = type> {{type}} </option>
+                {% endfor %}
+            </select>
+            
+            <br> </br>
+
+            <button> Add to Cart </button>
+            
+        </form>
+        
+    </body>
+</html>
