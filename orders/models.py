@@ -11,4 +11,4 @@ class Pizza(Food):
     price = models.FloatField()
 
     def __str__(self):
-        return f"A {self.size} {self.type} pizza that is {self.toppings} that costs {self.price}"
+        return f"A {self.size} {self.type} pizza that costs {self.price}"

@@ -4,16 +4,51 @@
 <html>
     <head>
         <title> Order Food </title>
+        <style>
+            .user {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                border: solid;
+            }
+        </style>
+        <script>
+            window.setInterval(function() {
+                size = document.getElementById('size')
+                size = size[size.selectedIndex].text
+                type = document.getElementById('Type')
+                type = type[type.selectedIndex].text
+                console.log(size)
+                console.log(type)
+                if (size === "small") {
+                    if (type === "regular") {
+                        document.getElementById('price').innerHTML = "$12.70"
+                    } else if (type === "sicilian") {
+                        document.getElementById('price').innerHTML = "$24.45"
+                    }
+                } else if (size === "large") {
+                    if (type === "regular") {
+                        document.getElementById('price').innerHTML = "$17.95"
+                    } else if (type === "sicilian") {
+                        document.getElementById('price').innerHTML = "$38.70"
+                    }
+                }
+            }, 50)
+        </script>
     </head>
     <body>
         <h1> Order Pizza </h1>
-        <h2> Make your Pizza! </h2>
-        <form action> 
 
+        <div class = "user" id = "user" name = "user"> {{name}} </div>
+        
+        <h2> Make your Pizza! </h2>
+        <form action = "{% url 'placePizzaOrder' %}" method = "post">
+            {% csrf_token %} 
+            <input type = "hidden" id = "user" name = "user" value = {{name}}> {{name}} </div> 
             <label for = "size"> Pick your size </label>
             <select name = "size" id = "size">
                 {% for size in sizes %}
-                    <option value = size> {{size}} </option>
+                    <option value = {{size}}> {{size}} </option>
                 {% endfor %}
             </select>
 
@@ -22,12 +57,10 @@
             <label for = "Type"> Pick your Type </label>
             <select name = "Type" id = "Type">
                 {% for type in types %}
-                    <option value = type> {{type}} </option>
+                    <option value = {{type}}> {{type}} </option>
                 {% endfor %}
             </select>
-            
-            <br> </br>
-
+            <p> Price: <span id = "price" name = "price"> </span></p>
             <button> Add to Cart </button>
             
         </form>

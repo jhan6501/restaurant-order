@@ -20,15 +20,25 @@
                 }
 
                 give_name();
-                document.getElementById("user").innerHTML = name
+                document.querySelector("#user").value = name
+                elements = document.querySelectorAll("[id = 'user']")
+                for (var i = 0; i < elements.length; i++) {
+                    console.log(i)
+                    elements[i].value = name;
+                    elements[i].innerHTML = name;
+                }
             })
         </script>
     </head>
     <body>
+        
         <h1> Menu </h1>
-        <div class = user id = user> </div>
-        <a href = "{% url 'orderPizza' %}">
-            Click to Order a Pizza
-        </a>
+        <div class = "user" id = "user" name = "user"> 
+        </div>
+        <form action = "{% url 'orderPizza' %}" method = "post">
+            {% csrf_token %}
+            <input type = "hidden" id = "user" name = "user"> </div> 
+            <button type = "submit"> Order Pizza </button>
+        </form>
     </body>
 </html>
