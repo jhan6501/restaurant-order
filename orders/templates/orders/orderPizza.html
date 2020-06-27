@@ -40,9 +40,13 @@
         <h1> Order Pizza </h1>
 
         <div class = "user" id = "user" name = "user"> {{name}} </div>
+        <form action = "{url 'viewCart' {{name}} }" method = "post">
+            {% csrf_token %}
+            <button type = "submit"> View Cart! </button>
+        </form> 
         
         <h2> Make your Pizza! </h2>
-        <form action = "{% url 'placePizzaOrder' %}" method = "post">
+        <form action = "{% url 'addCartPizza' %}" method = "post">
             {% csrf_token %} 
             <input type = "hidden" id = "user" name = "user" value = {{name}}> {{name}} </div> 
             <label for = "size"> Pick your size </label>

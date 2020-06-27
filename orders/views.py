@@ -23,22 +23,43 @@ def orderPizza(request):
 
     return render(request, "orders/orderPizza.html", context)
 
-def placePizzaOrder(request):
+def addCartPizza(request):
     name = request.POST['user']
     size = request.POST['size']
     style = request.POST['Type']
     price = 0.0
     if (size == "small"):
-        if (type == "regular"):
+        if (style == "regular"):
             price = 12.70
-        elif (type == "sicilian"):
+        elif (style == "sicilian"):
             price = 24.45
     elif (size == "large"):
-        if (type == "regular"):
+        if (style == "regular"):
             price = 17.95
-        elif (type == "sicilian"):
+        elif (style == "sicilian"):
             price = 38.70
 
+    pizza = Pizza(style = style, size = size, price = price)
+    
+    if (name in orders):
+        orders[name][0].append(pizza)
+        orderPrice = orders[name][1] 
+        orders[name][1] = orderPrice + price
+    else:
+        orders[name] = [[pizza], price]
+    
+    print(orders)
     return orderPizza(request)
+
+def viewCart(request, name):
+    orderList = orders[name][0]
+    orderPrice = orders[name][1]
+    context = {
+        "orderList": orderList,
+        "name": name,
+        "total price": orderPrice
+    }
+
+    return render(request, "orders/viewCart.html", context)
 
 

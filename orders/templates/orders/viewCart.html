@@ -1,0 +1,20 @@
+{% load static %}
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title> View Cart </title>
+    </head>
+
+    <body> 
+        <h1> View Cart </h1>
+
+        {% for order in orderList %}
+            <li>
+                {{order}} 
+            </li>
+        {% endfor %}
+    </body>
+
+    
+</html>
