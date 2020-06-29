@@ -6,11 +6,22 @@ from .models import *
 orders = {}
 
 def index(request):
-    return render(request, "orders/menu.html")
+    context = {
+        "firstLoad": True
+    }
+    return render(request, "orders/menu.html", context)
+
+def menu(request, name):
+    context = {
+        "firstLoad": False,
+        "name": name
+    }
+    print ("test for menu")
+    return render(request, "orders/menu.html", context)
 
 def orderPizza(request):
     name = request.POST['user']
-    print ("name is :" + name)
+    print ("test for order pizza")
     foodItem = "Pizza"
     sizes = ["small", "large"]
     types = ["regular", "sicilian"]
@@ -51,15 +62,30 @@ def addCartPizza(request):
     print(orders)
     return orderPizza(request)
 
+# def viewCart (request):
+#     print("test")
+#     return orderPizza(request)
+
 def viewCart(request, name):
     orderList = orders[name][0]
     orderPrice = orders[name][1]
     context = {
         "orderList": orderList,
         "name": name,
-        "total price": orderPrice
+        "totalPrice": orderPrice
     }
-
     return render(request, "orders/viewCart.html", context)
 
+def placeOrder(request, name):
+    orderList = orders[name][0]
+    orderPrice = orders[name][1]
 
+    order = Order(name = name, orderPrice = orderPrice)
+    order.save()
+    
+    for food in orderList:
+        food.order = order
+        food.save()
+    
+    
+    return index(request)

@@ -6,9 +6,12 @@
         <title> Order Food </title>
         <style>
             .user {
-                position: absolute;
-                top: 10px;
-                right: 10px;
+                float: right;
+                border: solid;
+            }
+
+            .menu {
+                float: right;
                 border: solid;
             }
         </style>
@@ -37,10 +40,17 @@
         </script>
     </head>
     <body>
-        <h1> Order Pizza </h1>
 
         <div class = "user" id = "user" name = "user"> {{name}} </div>
-        <form action = "{url 'viewCart' {{name}} }" method = "post">
+        
+        <form action = "{%url 'menu' name%}" method = post>
+            {% csrf_token %}
+            <button type = "submit"> View Menu </button>
+        </form>
+
+        <h1> Order Pizza </h1>
+
+        <form action = "{%url 'viewCart' name %}" method = "post">
             {% csrf_token %}
             <button type = "submit"> View Cart! </button>
         </form> 

@@ -9,11 +9,23 @@
     <body> 
         <h1> View Cart </h1>
 
+        <form action = "{%url 'menu' name%}" method = post>
+            {% csrf_token %}
+            <button type = "submit"> View Menu </button>
+        </form>
+
         {% for order in orderList %}
             <li>
                 {{order}} 
             </li>
         {% endfor %}
+
+        <p> Total Price: {{totalPrice}} </p>
+
+        <form action = "{%url 'placeOrder' name %}" method = post>
+            {% csrf_token %}
+            <button type = "submit"> Place Order </button>
+        </form>
     </body>
 
     

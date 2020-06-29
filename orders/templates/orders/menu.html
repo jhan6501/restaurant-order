@@ -6,10 +6,8 @@
         <title> Menu </title>
         <style>
             .user {
-                position: absolute;
-                top: 10px;
-                right: 10px;
                 border: solid;
+                float: right;
             }
         </style>
         <script>
@@ -18,8 +16,13 @@
                 function give_name() {
                     name = prompt ("Please type in your name", "");
                 }
-
-                give_name();
+               
+                if ("{{firstLoad}}" === "True") {
+                    
+                    give_name();
+                } else {
+                    name = "{{name}}"
+                }
                 document.querySelector("#user").value = name
                 elements = document.querySelectorAll("[id = 'user']")
                 for (var i = 0; i < elements.length; i++) {
@@ -31,10 +34,10 @@
         </script>
     </head>
     <body>
-        
+
+        <div class = "user" id = "user" name = "user"> </div>
         <h1> Menu </h1>
-        <div class = "user" id = "user" name = "user"> 
-        </div>
+
         <form action = "{% url 'orderPizza' %}" method = "post">
             {% csrf_token %}
             <input type = "hidden" id = "user" name = "user"> </div> 
