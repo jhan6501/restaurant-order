@@ -82,10 +82,24 @@ def placeOrder(request, name):
 
     order = Order(name = name, orderPrice = orderPrice)
     order.save()
-    
+
     for food in orderList:
         food.order = order
         food.save()
     
     
     return index(request)
+
+def trackOrder(request):
+    
+    name = request.POST['user']
+    order = Order.objects.get(name = name)
+    pizzaList = Pizza.objects.filter(order = order)
+
+    context = {
+        "name": name, 
+        "pizzaList": pizzaList,
+        "totalPrice": order.orderPrice
+    }
+
+    return render(request, "orders/trackOrder.html", context)

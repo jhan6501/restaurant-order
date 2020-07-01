@@ -8,6 +8,7 @@ urlpatterns = [
     path("orderPizza", views.orderPizza, name="orderPizza"),
     path("addCartPizza", views.addCartPizza, name = "addCartPizza"),
     path("<str:name>/viewCart", views.viewCart, name ="viewCart"),
-    path("<str:name>/placeOrder", views.placeOrder, name = "placeOrder")
+    path("<str:name>/placeOrder", views.placeOrder, name = "placeOrder"),
+    path("trackOrder", views.trackOrder, name = "trackOrder")
     #path("viewCart", views.viewCart, name = "viewCart")
 ]

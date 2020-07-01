@@ -16,4 +16,5 @@ class Pizza(models.Model):
     order = models.ForeignKey(Order, on_delete = models.CASCADE, related_name = "pizza", blank = True, null = True)
 
     def __str__(self):
+        
         return f"A {self.size} {self.style} pizza that costs {self.price}"

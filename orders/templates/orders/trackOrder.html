@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title> View Order </title>
+    </head>
+
+    <body> 
+        <h1> Order for {{name}} </h1> 
+
+        <form action = "{%url 'menu' name%}" method = post>
+            {% csrf_token %}
+            <button type = "submit"> View Menu </button>
+        </form>
+        
+        {% for pizza in pizzaList %}
+        <li>
+            {{pizza}} 
+        </li>
+        {% endfor %}
+
+        <p>Total Price is: {{totalPrice}} </p> 
+
+    </body>
+
+</html>
