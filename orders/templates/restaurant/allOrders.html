@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title> All Orders </title>
+        <style>
+            
+        </style>
+    </head>
+
+    <body> 
+        <h1> All Orders </h1>
+
+        {% for order in orderList %}
+            <li>
+                <a href="{% url 'viewOrder' order.id %}">
+                    {{order}}
+                </a>
+            </li>
+        {% empty %}
+            <li> No Orders </li>
+        {% endfor %}
+
+    </body>
+
+    
+</html>

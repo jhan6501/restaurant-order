@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title> View Order </title>
+    </head>
+
+    <body> 
+        <h1> View Order </h1>
+        <h2> {{order}} </h2> 
+        <form action = "{% url 'deleteOrder' %}" method ="post">
+            {% csrf_token %}
+            <input type = "hidden" id = "orderId" name = "orderId" value = {{order.id}}></div> 
+            <button> Delete Order </button> 
+        </form>
+        {% for pizza in pizzaList %}
+            <li>
+                <form action = "{% url 'deletePizza' %}" method = "post">
+                    {% csrf_token %}
+                    <input type = "hidden" id = "orderId" name = "orderId" value = {{order.id}}></div> 
+                    <input type = "hidden" id = "pizzaId" name = "pizzaId" value = {{pizza.id}}></input>
+                    {{pizza}} 
+                    <button> Remove Food </button>
+                </form>
+            </li>
+        {% endfor %}
+
+
+    </body>
+
+    
+</html>

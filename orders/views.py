@@ -79,23 +79,41 @@ def viewCart(request, name):
 def placeOrder(request, name):
     orderList = orders[name][0]
     orderPrice = orders[name][1]
+    if (Order.objects.filter(name = name).count() == 0):
+        order = Order(name = name, orderPrice = orderPrice)
+        order.save()
 
-    order = Order(name = name, orderPrice = orderPrice)
-    order.save()
-
-    for food in orderList:
-        food.order = order
-        food.save()
+        for food in orderList:
+            food.order = order
+            food.save()
     
+    else:
+        order = Order.objects.get(name = name) 
+
+        for food in orderList:
+            food.order = order
+            food.save()
+            
+        print(order)
+        print ("the price of order before update is:" + str(order.orderPrice))
+        order.orderPrice = order.orderPrice + orderPrice
+        print ("the price of order afters update is:" + str(order.orderPrice))
+        order.save()
     
     return index(request)
 
 def trackOrder(request):
-    
+    print ("test 1") 
     name = request.POST['user']
+
+    print ("test 2") 
     order = Order.objects.get(name = name)
+
+    print ("test 3")
     pizzaList = Pizza.objects.filter(order = order)
 
+    print(pizzaList)
+    print ("The price of the order is: " + str(order.orderPrice))
     context = {
         "name": name, 
         "pizzaList": pizzaList,
@@ -103,3 +121,47 @@ def trackOrder(request):
     }
 
     return render(request, "orders/trackOrder.html", context)
+
+def allOrders(request):
+
+    orderList = Order.objects.all()
+
+    context = {
+        "orderList": orderList
+    }
+
+    return render(request, "restaurant/allOrders.html", context)
+
+def viewOrder(request, order_id):
+    order = Order.objects.get(pk = order_id)
+    pizzaList = Pizza.objects.filter(order = order)
+    
+    print(order)    
+    print(pizzaList)
+
+    context = {
+        "order": order,
+        "pizzaList": pizzaList
+    }
+
+    return render(request, "restaurant/viewOrder.html", context)
+
+def deletePizza(request): 
+    orderId = request.POST["orderId"]
+    pizzaId = request.POST["pizzaId"]
+    
+    order = Order.objects.filter(id = orderId)
+    removePizza = Pizza.objects.filter(id = pizzaId)
+
+    order.orderPrice = order.orderPrice - removePizza.price
+    Pizza.objects.filter(id = pizzaId).delete()
+    return viewOrder(request, orderId)
+
+def deleteOrder(request):
+    orderId = request.POST["orderId"]
+    Order.objects.filter(id = orderId).delete()
+
+    return allOrders(request)
+
+
+

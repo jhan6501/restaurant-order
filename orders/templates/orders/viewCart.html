@@ -18,6 +18,8 @@
             <li>
                 {{order}} 
             </li>
+        {% empty %}
+            <li> Nothing in Cart!</li>
         {% endfor %}
 
         <p> Total Price: {{totalPrice}} </p>
