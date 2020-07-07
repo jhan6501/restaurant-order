@@ -26,6 +26,19 @@
             </li>
         {% endfor %}
 
+        {% for burger in burgerList %}
+            <li>
+                <form action = "{% url 'deleteBurger' %}" method = "post">
+                    {% csrf_token %}
+                    <input type = "hidden" id = "orderId" name = "orderId" value = {{order.id}}></div> 
+                    <input type = "hidden" id = "burgerId" name = "burgerId" value = {{burger.id}}></input>
+                    {{burger}} 
+                    <button> Remove Food </button>
+                </form>
+            </li>
+        {% endfor %}
+
+
         
 
 

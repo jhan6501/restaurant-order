@@ -153,8 +153,8 @@ def trackOrder(request):
     pizzaList = Pizza.objects.filter(order = order)
     burgerList = Burger.objects.filter(order = order)
     
-    foodList = chain(pizzaList, burgerList)
-    print(foodList)
+    foodList = chain(pizzaList,burgerList)
+    
     print ("The price of the order is: " + str(order.orderPrice))
     context = {
         "name": name, 
@@ -177,13 +177,12 @@ def allOrders(request):
 def viewOrder(request, order_id):
     order = Order.objects.get(pk = order_id)
     pizzaList = Pizza.objects.filter(order = order)
-    
-    print(order)    
-    print(pizzaList)
-
+    burgerList = Burger.objects.filter(order = order)
+    print(order)
     context = {
         "order": order,
-        "pizzaList": pizzaList
+        "pizzaList": pizzaList,
+        "burgerList": burgerList
     }
 
     return render(request, "restaurant/viewOrder.html", context)
@@ -192,11 +191,26 @@ def deletePizza(request):
     orderId = request.POST["orderId"]
     pizzaId = request.POST["pizzaId"]
     
-    order = Order.objects.filter(id = orderId)
-    removePizza = Pizza.objects.filter(id = pizzaId)
+    order = Order.objects.get(id = orderId)
+    removePizza = Pizza.objects.get(id = pizzaId)
 
     order.orderPrice = order.orderPrice - removePizza.price
+    order.save()
+    print (order.orderPrice)
     Pizza.objects.filter(id = pizzaId).delete()
+    return viewOrder(request, orderId)
+
+def deleteBurger(request): 
+    orderId = request.POST["orderId"]
+    burgerId = request.POST["burgerId"]
+    
+    order = Order.objects.get(id = orderId)
+    removeBurger = Burger.objects.get(id = burgerId)
+
+    order.orderPrice = order.orderPrice - removeBurger.price
+    order.save()
+    print (order.orderPrice)
+    Burger.objects.filter(id = burgerId).delete()
     return viewOrder(request, orderId)
 
 def deleteOrder(request):
