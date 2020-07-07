@@ -10,8 +10,9 @@
     </head>
 
     <body> 
+        
         <h1> All Orders </h1>
-
+    
         {% for order in orderList %}
             <li>
                 <a href="{% url 'viewOrder' order.id %}">
@@ -21,6 +22,12 @@
         {% empty %}
             <li> No Orders </li>
         {% endfor %}
+
+        <h2> Burger Topping Views</h2>
+        <form action = "{%url 'burgerToppingPage' %}" method = "post">
+                {% csrf_token %}
+                <button> Burger Toppings </button> 
+        </form>
 
     </body>
 

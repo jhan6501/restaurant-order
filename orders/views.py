@@ -1,6 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
+from itertools import chain
+from operator import attrgetter
+
 # Create your views here.
 
 orders = {}
@@ -21,7 +24,6 @@ def menu(request, name):
 
 def orderPizza(request):
     name = request.POST['user']
-    print ("test for order pizza")
     foodItem = "Pizza"
     sizes = ["small", "large"]
     types = ["regular", "sicilian"]
@@ -31,8 +33,19 @@ def orderPizza(request):
         "sizes": sizes,
         "types": types,
     }
-
     return render(request, "orders/orderPizza.html", context)
+
+def orderBurger(request):
+    name = request.POST['user']
+    sizes = ["small", "large"]
+    toppingList = burgerTopping.objects.all()
+    context = {
+        "name": name,
+        "sizes": sizes, 
+        "toppingList": toppingList
+    }
+
+    return render(request, "orders/orderBurger.html", context)
 
 def addCartPizza(request):
     name = request.POST['user']
@@ -62,9 +75,36 @@ def addCartPizza(request):
     print(orders)
     return orderPizza(request)
 
-# def viewCart (request):
-#     print("test")
-#     return orderPizza(request)
+def addCartBurger(request):
+    name = request.POST['user']
+    size = request.POST['size']
+    price = float(request.POST['price'])
+    selectedTopping = request.POST.getlist('topping')
+
+    print (selectedTopping)
+    burger = Burger(size = size, price = price)
+    burger.save()
+    for toppingName in selectedTopping:
+        topping = burgerTopping.objects.get(name = toppingName)
+        print (topping)
+        burger.toppings.add(topping)
+        print(burger.toppings)
+        
+    print(burger)
+
+    print ("test1")
+
+    if (name in orders):
+        orders[name][0].append(burger)
+        orderPrice = orders[name][1] 
+        orders[name][1] = orderPrice + price
+    else:
+        orders[name] = [[burger], price]
+    
+    print ("test2")
+
+    print (orders)
+    return orderBurger(request)
 
 def viewCart(request, name):
     orderList = orders[name][0]
@@ -111,12 +151,14 @@ def trackOrder(request):
 
     print ("test 3")
     pizzaList = Pizza.objects.filter(order = order)
-
-    print(pizzaList)
+    burgerList = Burger.objects.filter(order = order)
+    
+    foodList = chain(pizzaList, burgerList)
+    print(foodList)
     print ("The price of the order is: " + str(order.orderPrice))
     context = {
         "name": name, 
-        "pizzaList": pizzaList,
+        "foodList": foodList,
         "totalPrice": order.orderPrice
     }
 
@@ -162,6 +204,25 @@ def deleteOrder(request):
     Order.objects.filter(id = orderId).delete()
 
     return allOrders(request)
+
+def burgerToppingPage(request):
+    toppingList = burgerTopping.objects.all()
+
+    context = {
+        "toppingList": toppingList
+    }
+
+    return render(request, "restaurant/addBurgerTopping.html", context)
+    
+def addBurgerTopping(request):
+    toppingName = request.POST["topping"]
+    toppingPrice = float(request.POST["price"])
+
+    topping = burgerTopping(name = toppingName, price = toppingPrice)
+    topping.save()
+
+    return burgerToppingPage(request)
+
 
 
 

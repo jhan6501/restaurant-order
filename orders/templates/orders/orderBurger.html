@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Order Food </title>
+        <style>
+            .user {
+                float: right;
+                border: solid;
+            }
+
+            .menu {
+                float: right;
+                border: solid;
+            }
+        </style>
+        <script>
+            window.setInterval(function() {
+                let toppingPrice = 0
+                let toppingChoices = document.getElementsByClassName("toppingChoice")
+                for (i = 0; i < toppingChoices.length; i++) {
+                    if (toppingChoices[i].checked) {
+                        toppingPrice += parseFloat(toppingChoices[i].dataset.price)
+                    }
+                }
+                console.log(toppingPrice)
+
+                let basePrice = 0.00
+                size = document.getElementById('size')
+                size = size[size.selectedIndex].text
+                if (size === "small") {
+                    basePrice = 5.00
+                } else {
+                    basePrice = 7.50
+                }
+
+                let totalPrice = basePrice + toppingPrice
+                elements = document.querySelectorAll("[id = 'price']")
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].value = totalPrice;
+                    elements[i].innerHTML = totalPrice;
+                }
+            }, 50)
+        </script>
+    </head>
+    <body>
+
+        <div class = "user" id = "user" name = "user"> {{name}} </div>
+        
+        <form action = "{%url 'menu' name%}" method = post>
+            {% csrf_token %}
+            <button type = "submit"> View Menu </button>
+        </form>
+
+        <h1> Order Burger </h1>
+
+        <form action = "{%url 'viewCart' name %}" method = "post">
+            {% csrf_token %}
+            <button type = "submit"> View Cart! </button>
+        </form> 
+        
+        <h2> Make your Burger! </h2>
+        
+        <form action = "{% url 'addCartBurger' %}" method = "post">
+            {% csrf_token %} 
+            <input type = "hidden" id = "user" name = "user" value = {{name}}> {{name}} </div> 
+            <label for = "size"> Pick your size </label>
+            <select name = "size" id = "size">
+                {% for size in sizes %}
+                    <option value = {{size}}> {{size}} </option>
+                {% endfor %}
+            </select>
+            <br> </br>
+
+            <h3> Pick Toppings</h3> 
+            {% for topping in toppingList %}
+                <input class = "toppingChoice" data-price = {{topping.price}} type = "checkbox" name = "topping" value = {{topping.name}}> {{topping}} </input>
+                <br> </br>
+            {% empty %}
+                No Topping Options
+            {% endfor %}
+            
+            <br> </br>
+
+            <p> Price: <span id = "price" name = "price"> </span></p>
+            <input type = "hidden" id = "price" name = "price"> </div>
+            <button> Add to Cart </button>
+            
+        </form>
+        
+    </body>
+</html>

@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title> Add Burger Topping </title>
+    </head>
+
+    <body> 
+        <form action = "{%url 'addBurgerTopping' %}" method = "post">
+            {% csrf_token %}
+            <input type = "text" id = "topping" name = "topping"></div> 
+            <input type = "number" step = "0.01" name = "price" id = "price"></div>
+            <button> Add Topping </button> 
+        </form>
+
+        <h2> List of Existing Toppings </h2>
+        {% for topping in toppingList %}
+            <li>
+                {{topping}}
+            </li>
+        {% empty %}
+            <li>
+                No Toppings
+            </li>
+        {% endfor %}
+
+        
+    </body>
+
+    
+</html>

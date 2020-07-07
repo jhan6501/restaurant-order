@@ -14,12 +14,12 @@
             <button type = "submit"> View Menu </button>
         </form>
         
-        {% for pizza in pizzaList %}
+        {% for food in foodList %}
         <li>
-            {{pizza}} 
+            {{food}} 
         </li>
         {% empty %}
-        
+
         {% endfor %}
 
         <p>Total Price is: {{totalPrice}} </p> 
